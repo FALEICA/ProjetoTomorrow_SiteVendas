@@ -11,7 +11,7 @@ const oldProd = [
 
 ]
 oldProd.forEach(p => {
-  p.prdQtde = 0;
+  p.prdQtde = 1;
 });
 
 
@@ -19,9 +19,12 @@ oldProd.forEach(p => {
 const objetoProduto = oldProd;
 
 
+
+
 /*** DEFININDO OBJETO CARRINHO DE COMPRAS VAZIO ***/
 var carrinhoCodigoInicial = 0;
 var carrinhoCodigoAtual = 0;
+
 var objetoCarrinho = [
   { carCodigo: null, carData: null, carStatus: null, carProdutos: [] },
 ];
@@ -30,6 +33,9 @@ setInterval(() => {
   atualizaVariavelGlobalCarrinho();
   atualizaBadge();
   calculaTotaisdoCarrinho();
+
+  
+
 }, 1000);
 
 function atualizaVariavelGlobalCarrinho() {
@@ -179,16 +185,17 @@ function quemsomos() {
 
 function listarTodosOsProdutosNaHomePage(origem = "") {
   cardsTamanho();
+  let novaLista
 
   limparCorpoDinamico();
   const corpo = document.getElementById("corpoDinamico");
 
   if (origem != "") {
-    var novaLista = objetoProduto.filter(
+      novaLista = objetoProduto.filter(
       (objetoProduto) => objetoProduto.prdCategoria === origem
     );
   } else {
-    var novaLista = objetoProduto;
+    novaLista = objetoProduto;
   }
 
   if (novaLista.length == 0) {
@@ -343,6 +350,8 @@ function atualizaBadge() {
 
 function listarTodoProdutosCarrinhoDeCompras(carrinhoCode) {
 
+  console.log("Codigo do Carrinho "+carrinhoCode);
+
   var existeCarrinhoSetado = objetoCarrinho.filter(
     (x) => x.carCodigo === carrinhoCode
   );
@@ -355,7 +364,7 @@ function listarTodoProdutosCarrinhoDeCompras(carrinhoCode) {
     if (listaDeProdutosInCarrinho.length > 0) {
       /*** VERIFICANDO SE OS ELEMENTOS DO CARRINHO JA EXISTEM PARA MANTER OS VALORES ATUALIZADOS NA TELA */
       calculaTotaisdoCarrinho();
-      console.log(objetoCarrinho);
+      //console.log(objetoCarrinho);
 
       /** LIMPANDO CORPO DINÂMICO DA PAGINA */
       limparCorpoDinamico();
@@ -547,13 +556,14 @@ function listarTodoProdutosCarrinhoDeCompras(carrinhoCode) {
       alert("Não existem dados para serem exibidos no carrinho");
     }
   } else {
+    limparCorpoDinamico();
     alert("Não existem dados para serem exibidos no carrinho");
   }
 }
 
 function calculaTotaisdoCarrinho() {
   if (document.querySelectorAll(".inputs-qtdes").length) {
-    console.clear();
+    //console.clear();
 
     const itemDigitadoNaQuantidade = document.querySelectorAll(".inputs-qtdes");
     var contagemTotalDeProdutosNoCarrinho = 0;
@@ -597,8 +607,6 @@ function calculaTotaisdoCarrinho() {
       labelTotais[2].textContent = `Valor: ${numberValorFormatado}`;
     }
 
-  } else {
-    console.log("inputQtdeAindaNaoExiste");
   }
 }
 
@@ -709,8 +717,36 @@ function cardsTamanho() {
 
 
 function concluirCompra(){
-  let txtAlert = objetoCarrinho;
-  alert(txtAlert);
+  insertLocalMemoria();
+  
+   if(objetoCarrinho.filter(p => p.carStatus === "aberto").length > 0){
+
+    objetoCarrinho.filter(p => p.carStatus === "aberto")[0].carStatus = "fechado";
+    carrinhoCodigoAtual = 0;
+
+    
+
+    console.log(objetoCarrinho);
+
+    limparCorpoDinamico();
+
+    
+    alert("COMPRA FINALIZADA");
+   }
+
+
+   
+
+
+  
+}
+
+
+
+function insertLocalMemoria(){
+
+  localStorage.setItem('CarrinhoDeCompras', JSON.stringify(objetoCarrinho.filter(p => p.carStatus === "aberto")[0] ));
+
 }
 
 ///** CRIANDO O RODAPÉ DA PAGINA E INCLUINDO TAG FOOTER APOS O CORPO DA PAGINA */

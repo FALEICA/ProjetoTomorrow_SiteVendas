@@ -2135,6 +2135,13 @@ oldProd.forEach((p) => {
 
 const objetoProduto = oldProd;
 
+
+
+
+
+
+
+
 /*** DEFININDO OBJETO CARRINHO DE COMPRAS VAZIO ***/
 var carrinhoCodigoInicial = 0;
 var carrinhoCodigoAtual = 0;
@@ -2159,6 +2166,11 @@ function atualizaVariavelGlobalCarrinho() {
   }
 }
 
+
+
+
+
+
 /** CAHAMANDO FUNÇÃO QUE CRIA A NAVBAR */
 criarNavBar();
 
@@ -2181,6 +2193,11 @@ function limparCorpoDinamico() {
   document.body.appendChild(novoCorpoDinamico);
 
 }
+
+
+
+
+
 
 
 /**** CRIANDO NAVBAR DINÂMICA */
@@ -2287,17 +2304,22 @@ function criarNavBar() {
   divNav.appendChild(navUl);
 }
 
-function quemsomos() {
-  limparCorpoDinamico();
-  const corpo = document.getElementById("corpoDinamico");
 
-  const messagemQuemSomos = document.createElement("h2");
-  messagemQuemSomos.textContent =
-    "Nossa missão é satisfazer nossos clientes, fornecendo produtos de alta qualidade e que sejam fabricados por nossos parceiros de maneira responsável e sustentável";
 
-  corpo.appendChild(messagemQuemSomos);
-}
 
+
+
+
+
+
+
+
+
+
+
+
+
+/***  LISTANDO TODOS OS PRODUTOS NA HOME OU OS PRODUTOS POR CATEGORIA ****/
 function listarTodosOsProdutosNaHomePage(origem = "") {
   cardsTamanho();
   let novaLista;
@@ -2373,8 +2395,28 @@ function listarTodosOsProdutosNaHomePage(origem = "") {
 
     cardBtnCarrinho.appendChild(cardBtnIcon);
   }
+
+  if(novaLista.length == 0){
+    const corpoDinamico = document.getElementById("corpoDinamico");    
+    corpoDinamico.setAttribute("style","height: 600px");
+
+    const msgListaInexistente = document.createElement("h2");
+    msgListaInexistente.textContent = `Não existem produtos para a categoria ${origem} `;
+
+    corpoDinamico.appendChild(msgListaInexistente);
+  }
 }
 
+
+
+
+
+
+
+
+
+
+/**** CRIANDO E ADICIONANDO PRODUTOS NO CARRINHO DE COMPRAS ****/
 function carrinhoAdd(btnPrdId) {
   carrinhoCodigoInicial++;
   var botaoID = btnPrdId;
@@ -2402,6 +2444,8 @@ function carrinhoAdd(btnPrdId) {
     inserirProdutoCarrinho(objetoCarrinho, botaoID);
   }
 }
+
+
 
 function inserirProdutoCarrinho(carrinho, btnPrdId) {
   var prdFindById = objetoProduto.filter((prd) => prd.prdID === btnPrdId);
@@ -2441,14 +2485,23 @@ function inserirProdutoCarrinho(carrinho, btnPrdId) {
   atualizaBadge();
 }
 
+
+
+
+
+
+
+
+
+
+
+/*** ATUALIZANDO QUANTIDADES INFORMADAS NO BOTÃO DE IR PARA O CARRINHO DE COMPRAS */
 function atualizaBadge() {
   /*** VERIFICANDO COMO ESTÁ O CARRINHO DE COMPRAS */
   if (objetoCarrinho.filter((b) => b.carStatus === "aberto").length > 0) {
     var qtdePedidos = objetoCarrinho.filter((b) => b.carStatus === "aberto")[0]
       .carProdutos.length;
   }
-
-  /*** ATUALIZANDO QUANTIDADE DE PEDIDO NA BADGE DO BOTÃO DE CARRINHO DE COMPRAS */
   const badgeExists = document.querySelectorAll("car-badge");
 
   const badgeMsg = document.getElementById("numPedBadgeId");
@@ -2461,6 +2514,14 @@ function atualizaBadge() {
   badgeMsg.textContent = qtdePedidos;
 }
 
+
+
+
+
+
+
+
+/*** LISTANDO PRODUTOS NA TELA QUE APRESENTA O CARRINHO DE COMPRAS... */
 function listarTodoProdutosCarrinhoDeCompras(carrinhoCode) {
   //console.log("Codigo do Carrinho " + carrinhoCode);
 
@@ -2689,6 +2750,11 @@ function listarTodoProdutosCarrinhoDeCompras(carrinhoCode) {
   }
 }
 
+
+
+
+
+/*** CALCULANDO TOTAIS DO CARRINHO DE COMPRAS */
 function calculaTotaisdoCarrinho() {
   if (document.querySelectorAll(".inputs-qtdes").length) {
     //console.clear();
@@ -2747,6 +2813,12 @@ function calculaTotaisdoCarrinho() {
   }
 }
 
+
+
+
+
+
+
 function formatNumero(number) {
   const numberFormatted = parseFloat(number).toLocaleString("pt-BR", {
     style: "currency",
@@ -2754,6 +2826,11 @@ function formatNumero(number) {
   });
   return numberFormatted;
 }
+
+
+
+
+
 
 /*** FUNCAO PARA O BOTAO REMOVER PARA REMOVER O ITEM DO CARRINHO DE COMPRAS */
 function removeItemCarrinhoCompras(produtoID) {
@@ -2775,8 +2852,28 @@ function removeItemCarrinhoCompras(produtoID) {
   }
 }
 
-/*** EVENTOS DOS COMPONENTES NA PAGINA HTML */
 
+
+
+function quemsomos() {
+  limparCorpoDinamico();
+  const corpo = document.getElementById("corpoDinamico");
+  corpo.setAttribute("style","height: 600px");
+
+  const messagemQuemSomos = document.createElement("h2");
+  messagemQuemSomos.textContent =
+    "Nossa missão é satisfazer nossos clientes, fornecendo produtos de alta qualidade e que sejam fabricados por nossos parceiros de maneira responsável e sustentável";
+
+  corpo.appendChild(messagemQuemSomos);
+
+    
+    
+}
+
+
+
+
+/*** EVENTOS E AÇÕES DOS COMPONENTES NA PAGINA HTML ****/
 document
   .getElementById("quemsomosid")
   .addEventListener("click", function (event) {
@@ -2837,28 +2934,34 @@ document
     event.preventDefault();
   });
 
-function cardsTamanho() {
-  const cards = document.querySelectorAll(".card");
-  var maxHeight = 0;
 
-  cards.forEach((card) => {
-    if (card.offsetHeight > maxHeight) {
-      maxHeight = card.offsetHeight;
-      //console.log(maxHeight);
-    }
-  });
+
+
+  function cardsTamanho() {
+    const cards = document.querySelectorAll(".card");
+    var maxHeight = 0;
+
+    cards.forEach((card) => {
+      if (card.offsetHeight > maxHeight) {
+        maxHeight = card.offsetHeight;
+      }
+    });
 
   cards.forEach((card) => {
     card.style.maxHeight = maxHeight + "px";
   });
+
 }
 
+
+
+
+/*** CONCLUINDO A COMPREA E APRESENTANDO OS DADOS DA COMPRA PARA O USUARIO */
 function concluirCompra() {
   insertLocalMemoria();
 
   if (objetoCarrinho.filter((p) => p.carStatus === "aberto").length > 0) {    
     let carrinhoFinal =  objetoCarrinho.filter((p) => p.carStatus === "aberto");
-
 
     let txtMensagemCarrinhoFechado = "";
     let txtProduosInCarrinhoFechado = "";
@@ -2884,9 +2987,6 @@ function concluirCompra() {
         txtResumoFinal = `\n${"_".repeat(60)}\nProdutos: ${valContagem.toFixed(2)}\nQuantidade: ${valQtdeGeral.toFixed(2)}\nTotal Pago: ${formatNumero(valTotaGeral)}\n" OBRIGADO POR SUA COMPRA, VOLTE SEMPRE :)  !!!"`;
 
 
-
-        
-
         txtMensagemCarrinhoFechado = `CARRINHO DE COMPRA Nº ${22} FINALIZADO COM SUCESSO!\n  ${txtProduosInCarrinhoFechado} ${txtResumoFinal}`;
   
 
@@ -2907,9 +3007,7 @@ function concluirCompra() {
       "fechado";
     carrinhoCodigoAtual = 0;
 
-    limparCorpoDinamico();
-
-    
+    limparCorpoDinamico();    
     
   }
 }
@@ -2921,13 +3019,17 @@ function insertLocalMemoria() {
   );
 }
 
+
+
+
+
 ///** CRIANDO O RODAPÉ DA PAGINA E INCLUINDO TAG FOOTER APOS O CORPO DA PAGINA */
 const pageBody = document.getElementById("body");
 const footer = document.createElement("footer");
 
 const msgFooter = document.createElement("p");
 msgFooter.textContent =
-  "@Este Site é um PROJETO dos Alunos(as) Fábio Leite Cardoso, Antonio ,Jonata, Natan  do Curso Programação de Computadores com Javascript ofertado pela TOMORROW, sob a orientação do professor Claudio Silva";
+  "@Este é um projeto dos Alunos(as) Alana Rosa, Antonio Fernando ,Jonata Oliveira, Natan Leal e Fábio Leite para o Curso Programação de Computadores com Javascript ofertado pelo projeto Tomorrow, sob a orientação do professor Claudio Silva";
 footer.appendChild(msgFooter);
 
 pageBody.after(footer);
